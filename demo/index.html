@@ -36,10 +36,32 @@
             background-color: rgba(68, 172, 243, .7);
             color: #fff;
         }
+        
+        #code {
+        		line-height: 1.5;
+        }
     </style>
 </head>
 
 <body>
+    <div id="code" style="margin-top: 112.5px;">
+        <span class="comments"><font face="楷体" size="6" color="pink">我的爱人</font></span><br>
+        <span class="space">我会牵着你的手，走到我们满头白发的那一天</span><br>
+        <span class="space">我会守护你生命里的精彩，并陪伴你一路精彩下去。</span><br>
+        <span class="space">你的幸福快乐，是我一生的追求。</span><br>
+        <span class="space">我会每一天带着笑脸，和你说早安，</span><br>
+        <span class="space">我会每一晚与你道声晚安再入梦乡，</span><br>
+        <span class="space">我会带你去所有你想去的地方，</span><br>
+        <span class="space">陪你闹看你笑</span><br>
+        <span class="space">历经你生命中所有的点点滴滴。</span><br>
+        <span class="space">我期待这一生与你一起走过，</span><br>
+        <span class="space">走到尽头再回头看尽一生铅华满地，</span><br>
+        <span class="space">我期待与你慢慢变老，</span><br>
+        <span class="space">等我们老到哪儿也去不了，</span><br>
+        <span class="space">还能满载着一生的幸福快乐。</span><br>
+        <span class="space">我愿意爱你直到老去</span><br>
+        <span>_</span>
+    </div>
     <div>
         account：<input type="text" id="account" readonly="readonly" placeholder="请输入账号" />
     </div>
@@ -48,8 +70,8 @@
         <a class="btn" id="btnNumber">输入金额</a>
     </div>
     <div>
-        <input type="hidden" id="pwd" />
-        <a class="btn" id="btnPwd">去支付</a>
+        <input type="hidden" id="password" />
+        <a class="btn" id="btnPassword">去支付</a>
     </div>
     <script src="../src/jquery-2.1.4.min.js"></script>
     <script src="../src/numberKeypad.js"></script>
@@ -58,8 +80,7 @@
         $account.on('click', function () {
             $account.NumberKeypad({
                 zIndex: 1001,
-                dot: true,
-                type: 'number',
+                type: 'account',
                 callback: function () {
                     console.log('你输入的账号为：' + $account.val());
                 }
@@ -71,18 +92,18 @@
             $money.NumberKeypad({
                 zIndex: 1001,
                 type: 'number',
-                callback: function (elem, num) {
-                    console.log('你输入的金额为：' + num);
+                callback: function (elem, number) {
+                    console.log('你输入的金额为：' + number);
                 }
             });
         });
 
-        $('#btnPwd').on('click', function () {
-            $('#pwd').NumberKeypad({
+        $('#btnPassword').on('click', function () {
+            $('#password').NumberKeypad({
                 random: true,
                 zIndex: 1001,
-                callback: function (elem, pwd) {
-                    console.log('你的密码是：' + pwd);
+                callback: function (elem, password) {
+                    console.log('你的密码是：' + password);
                     elem.close();
                 }
             });

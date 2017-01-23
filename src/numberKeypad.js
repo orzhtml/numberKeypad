@@ -11,18 +11,20 @@
         random: false, // 是否随机摆放1-9数字
         zIndex: 1000, // 弹窗的层级，可根据不同页面配置
         ciphertext: true, // 是否显示明文，默认密文*
-        type: 'pwd',
-        dot: false,
+        type: 'password', // password | number | account
         callback: '' // 回调
     };
 
     function numberKeypad(elem, args) {
         this.options = $.extend({}, DEFAULTS, args);
-        if (this.options.type == 'number') {
-            this.$html = $(templateNumber());
-        } else {
-            this.$html = $(templatePwd());
-        }
+
+        this.isPassword = this.options.type === 'password';
+        this.isNumber = this.options.type === 'number';
+        this.isAccount = this.options.type === 'account';
+
+        // 选择模板
+        this.$html = this.isNumber || this.isAccount ? $(templateNumber()) : $(templatePwd());
+
         this.el = elem;
         this.init();
     };
@@ -31,28 +33,48 @@
 
     numberKeypad.prototype.init = function () {
         $('body').append(this.$html);
+
         // 绑定默认关闭按钮
         this.$html.find('[data-role="close"]').on('click', $.proxy(function () {
-            if (this.options.type == 'number') {
-                this.options.callbackOk && this.options.callbackOk();
-            }
             this.close();
         }, this));
+
         this.$html.find('[data-role="ok"]').on('click', $.proxy(function () {
             var num = this.el.data('num');
             if (num) {
-                this.el.val(addZero(num, 2));
+                if (!this.isAccount) {
+                    this.el.val(addZero(num, 2));
+                } else {
+                    this.el.val(num);
+                }
             } else {
                 this.el.val('');
+                num = '';
             }
+            $('body').css('marginTop', '');
             this.options.callback && this.options.callback(this, num);
             this.close();
         }, this));
+
         // 显示弹窗
         this.$html.css('zIndex', this.options.zIndex).addClass('show');
+
         setTimeout($.proxy(function () {
             this.$html.addClass('show-visible');
+            
+            var top = this.el.offset().top;
+			var mainHeight = this.$html.height();
+			var cntHeight = this.$html.find('.ui-dialog-cnt').height();
+			
+            if (this.isNumber || this.isAccount && top >= (mainHeight - cntHeight)) {
+                $('body').addClass('numberBody').css('marginTop', -cntHeight);
+            }
         }, this), 0);
+
+        if (this.isAccount) {
+            this.$html.find('[data-key="."]').addClass('bg-gray').html('&nbsp;');
+        }
+
         // 其他事件
         this.num();
         this.add();
@@ -64,6 +86,7 @@
         this.$html.removeClass("show-visible");
         setTimeout($.proxy(function () {
             this.$html.remove();
+            $('body').removeClass('numberBody');
         }, this), 300);
     };
 
@@ -74,7 +97,7 @@
         var arr = [];
         var len = 9;
         // 随机 1-9
-        if (this.options.random && this.options.type != 'number') {
+        if (this.options.random && this.options.type != 'number' || this.isAccount) {
             while (arr.length < 9) {
                 //取 1-9 之间的整数
                 var num = Math.floor(9 * Math.random()) + 1;
@@ -112,9 +135,14 @@
     numberKeypad.prototype.add = function () {
         var $this = this;
 
-        if (this.options.type == 'number') {
+        if (this.isNumber || this.isAccount) {
             this.$html.find('[data-trigger="key"]').on('click', function () {
                 var $self = $(this);
+
+                if ($self.hasClass('bg-gray')) {
+                    return;
+                }
+
                 var key = $self.data('key');
                 var _commaNum = '';
                 // 你的回调代码
@@ -135,7 +163,11 @@
                 _commaNum = setComma(num);
 
                 $this.el.data('num', num);
-                $this.el.val(_commaNum);
+                if (!$this.isAccount) {
+                    $this.el.val(_commaNum);
+                } else {
+                    $this.el.val(num);
+                }
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
@@ -170,7 +202,7 @@
     numberKeypad.prototype.del = function () {
         var $this = this;
 
-        if (this.options.type == 'number') {
+        if (this.isNumber || this.isAccount) {
             this.$html.find('.number-delete').on('click', function () {
                 var num = $this.el.data('num');
                 var _commaNum = '';
@@ -179,7 +211,11 @@
                     num = num.slice(0, -1); // 从最右边开始截取 1 位字符
                     $this.el.data('num', num); // 赋值给文本框同步
                     _commaNum = setComma(num);
-                    $this.el.val(_commaNum);
+                    if (!$this.isAccount) {
+                        $this.el.val(_commaNum);
+                    } else {
+                        $this.el.val(num);
+                    }
                 }
             });
         } else {
