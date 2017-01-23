@@ -17,7 +17,7 @@
 
     function numberKeypad(elem, args) {
         this.options = $.extend({}, DEFAULTS, args);
-
+	
         this.isPassword = this.options.type === 'password';
         this.isNumber = this.options.type === 'number';
         this.isAccount = this.options.type === 'account';
@@ -73,6 +73,10 @@
 
         if (this.isAccount) {
             this.$html.find('[data-key="."]').addClass('bg-gray').html('&nbsp;');
+        }
+        
+        if (this.isNumber) {
+        		this.el.val(this.el.data('num') || '');
         }
 
         // 其他事件
@@ -160,14 +164,8 @@
 
                 num += key;
 
-                _commaNum = setComma(num);
-
                 $this.el.data('num', num);
-                if (!$this.isAccount) {
-                    $this.el.val(_commaNum);
-                } else {
-                    $this.el.val(num);
-                }
+                $this.el.val(num);
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
@@ -205,17 +203,11 @@
         if (this.isNumber || this.isAccount) {
             this.$html.find('.number-delete').on('click', function () {
                 var num = $this.el.data('num');
-                var _commaNum = '';
                 //  数字为空的时候不在执行
                 if (num !== '') {
                     num = num.slice(0, -1); // 从最右边开始截取 1 位字符
                     $this.el.data('num', num); // 赋值给文本框同步
-                    _commaNum = setComma(num);
-                    if (!$this.isAccount) {
-                        $this.el.val(_commaNum);
-                    } else {
-                        $this.el.val(num);
-                    }
+                    $this.el.val(num);
                 }
             });
         } else {

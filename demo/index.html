@@ -81,8 +81,8 @@
             $account.NumberKeypad({
                 zIndex: 1001,
                 type: 'account',
-                callback: function () {
-                    console.log('你输入的账号为：' + $account.val());
+                callback: function (elem, number) {
+                    console.log('你输入的账号为：' + number);
                 }
             });
         });
