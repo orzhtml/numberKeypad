@@ -1,0 +1,276 @@
+/*ui-dialog*/
+
+.ui-dialog {
+    background-color: rgba(0, 0, 0, 0.2);
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    z-index: 1000;
+}
+
+.ui-dialog.show {
+    display: -webkit-box;
+}
+
+.ui-dialog .ui-dialog-cnt {
+    border-radius: 4px;
+    background-clip: padding-box;
+    outline: 0;
+    pointer-events: auto;
+    background-color: #f2f2f2;
+    position: relative;
+    width: 80%;
+}
+
+.ui-dialog .ui-dialog-hd {
+    position: relative;
+    font-size: 0;
+    line-height: 0;
+}
+
+.ui-dialog .ui-dialog-hd .icon-close {
+    height: 48px;
+    line-height: 48px;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 45px;
+}
+
+.ui-dialog .ui-dialog-hd .icon-close:after {
+    background: url(./img/icon_close_black@2x.png) no-repeat center center;
+    background-size: 100%;
+    content: '';
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+}
+
+.ui-dialog .ui-dialog-hd .title {
+    color: #282828;
+    font-size: 16px;
+    height: 48px;
+    line-height: 48px;
+    padding: 0 45px;
+    text-align: center;
+}
+
+.ui-dialog .ui-dialog-bd {
+    min-height: 71px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 18px;
+    font-size: 16px;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    -webkit-box-orient: vertical;
+}
+
+.ui-dialog-actions {
+    background-color: transparent;
+    padding: 0;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: justify;
+    -webkit-box-align: end;
+}
+
+.ui-dialog-actions.show-visible {
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.ui-dialog-actions.show-visible .ui-dialog-cnt {
+    -webkit-transform: translateY(0%);
+    -ms-transform: translateY(0%);
+    transform: translateY(0%);
+}
+
+.ui-dialog-actions .ui-dialog-cnt {
+    border-radius: 0;
+    bottom: 0;
+    width: 100%;
+    -webkit-transition: all 300ms;
+    transition: all 300ms;
+    -webkit-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    transform: translateY(100%);
+}
+
+.ui-dialog-actions .ui-dialog-bd {
+    padding: 0;
+}
+
+
+/*
+ * 支付密码弹窗样式
+ * */
+
+.number-keypad .ui-dialog-hd {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.number-keypad .ui-dialog-hd .icon-close {
+    left: 0;
+    right: auto;
+}
+
+.number-keypad .password {
+    display: none;
+}
+
+.number-keypad .pwd-box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 0;
+    padding: 35px 22px;
+    text-align: center;
+    width: 100%;
+}
+
+.number-keypad .pwd-val {
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    font-size: 24px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    height: 45px;
+    line-height: 35px;
+    padding: 10px 0;
+    text-align: center;
+    width: 100%;
+}
+
+.number-keypad .pwd-val:first-child {
+    border-radius: 5px 0 0 5px;
+}
+
+.number-keypad .pwd-val:not(:last-child) {
+    border-right: 0;
+}
+
+.number-keypad .pwd-val:not(:first-child) {
+    border-left-color: #e8e8e8;
+}
+
+.number-keypad .pwd-val:last-child {
+    border-radius: 0 5px 5px 0;
+}
+
+.number-keypad .number-box {
+    width: 100%;
+}
+
+.number-keypad .ui-flex {
+    border-bottom: 1px solid #eee;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    text-align: center;
+    width: 100%;
+}
+
+.number-keypad .ui-flex-item {
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    font-size: 24px;
+    line-height: 52px;
+}
+
+.number-keypad .ui-flex-item:not(.bg-gray):active {
+    background-color: rgba(238, 238, 238, 0.2);
+}
+
+.number-keypad .ui-flex-item:last-child {
+    border-right: 0;
+}
+
+.number-keypad .bg-gray, .number-keypad .number-delete {
+    background-color: #e3e8ee;
+}
+
+.number-keypad .icon-delete {
+    background: url(./img/icon_delete@2x.png) no-repeat center center;
+    background-size: 22px;
+    content: '';
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    vertical-align: middle;
+}
+
+.number-keypad .icon-hide {
+    background: url(./img/icon_keyboard@2x.png) no-repeat center center;
+    background-size: 28px;
+    content: '';
+    display: inline-block;
+    height: 40px;
+    width: 46px;
+    vertical-align: middle;
+}
+
+.number-keypad .number-bar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.number-keypad .number-bar .number-box {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    width: auto;
+}
+
+.number-keypad .number-bar .fun-box {
+    width: 80px;
+}
+
+.number-keypad .number-bar .fun-box .ui-border-b {
+    height: 100%;
+}
+
+.number-keypad .number-bar .fun-box a {
+    border-left: 1px solid #eee;
+    display: block;
+    height: 50%;
+}
+
+.number-keypad .number-bar .fun-box a:active {
+    background-color: rgba(238, 238, 238, 0.2);
+}
+
+.number-keypad .number-bar .number-delete {
+    background: url(./img/icon_delete2@2x.png) no-repeat center center #fff;
+    background-size: 22px;
+}
+
+.number-keypad .fun-box .number-ok {
+    background: #e3e8ee;
+    position: relative;
+}
+
+.number-keypad .fun-box .number-ok span {
+    color: #fff;
+    font-size: 16px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}

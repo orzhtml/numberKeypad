@@ -1,0 +1,92 @@
+<!doctype html>
+<html class="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="author" content="orzhtml.github.io">
+    <title>orzhtml.github.io</title>
+    <link rel="stylesheet" href="../src/numberKeypad.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            padding: 20px;
+            -webkit-user-select: none;
+        }
+        
+        .btn {
+            background-color: #28A0F2;
+            border-radius: 25px;
+            color: #fff;
+            display: inline-block;
+            height: 40px;
+            line-height: 20px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .btn:active {
+            background-color: rgba(68, 172, 243, .7);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        account：<input type="text" id="account" readonly="readonly" placeholder="请输入账号" />
+    </div>
+    <div>
+        <input type="text" id="money" readonly="readonly" placeholder="请输入转账金额" />
+        <a class="btn" id="btnNumber">输入金额</a>
+    </div>
+    <div>
+        <input type="hidden" id="pwd" />
+        <a class="btn" id="btnPwd">去支付</a>
+    </div>
+    <script src="../src/jquery-2.1.4.min.js"></script>
+    <script src="../src/numberKeypad.js"></script>
+    <script>
+        var $account = $('#account');
+        $account.on('click', function () {
+            $account.NumberKeypad({
+                zIndex: 1001,
+                dot: true,
+                type: 'number',
+                callback: function () {
+                    console.log('你输入的账号为：' + $account.val());
+                }
+            });
+        });
+
+        var $money = $('#money');
+        $money.on('click', function () {
+            $money.NumberKeypad({
+                zIndex: 1001,
+                type: 'number',
+                callback: function (elem, num) {
+                    console.log('你输入的金额为：' + num);
+                }
+            });
+        });
+
+        $('#btnPwd').on('click', function () {
+            $('#pwd').NumberKeypad({
+                random: true,
+                zIndex: 1001,
+                callback: function (elem, pwd) {
+                    console.log('你的密码是：' + pwd);
+                    elem.close();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

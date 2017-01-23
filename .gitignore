@@ -1,0 +1,9 @@
+*.iml
+.idea
+.DS_Store
+node_modules/
+.github/
+.git/
+db.json
+npm-debug.log
+.project
