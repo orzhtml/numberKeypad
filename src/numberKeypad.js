@@ -1,6 +1,6 @@
 /*!
  * User: http://orzhtml.github.io/
- * Date: 16-12-02 上午11:55
+ * Date: 17-01-23 上午17:15
  * Detail: 支付密码弹窗
  */
 
@@ -14,14 +14,19 @@
         type: 'password', // password | number | account
         callback: '' // 回调
     };
+    
+    var isIos = navigator.userAgent.match(/iPhone|iPad|iPod/i);
 
     function numberKeypad(elem, args) {
         this.options = $.extend({}, DEFAULTS, args);
-	
+
         this.isPassword = this.options.type === 'password';
         this.isNumber = this.options.type === 'number';
         this.isAccount = this.options.type === 'account';
-
+        this.clickEvent = 'click';
+        if (isIos) {
+            this.clickEvent = 'touchstart';
+        }
         // 选择模板
         this.$html = this.isNumber || this.isAccount ? $(templateNumber()) : $(templatePwd());
 
@@ -35,11 +40,11 @@
         $('body').append(this.$html);
 
         // 绑定默认关闭按钮
-        this.$html.find('[data-role="close"]').on('click', $.proxy(function () {
+        this.$html.find('[data-role="close"]').on(this.clickEvent, $.proxy(function () {
             this.close();
         }, this));
 
-        this.$html.find('[data-role="ok"]').on('click', $.proxy(function () {
+        this.$html.find('[data-role="ok"]').on(this.clickEvent, $.proxy(function () {
             var num = this.el.data('num');
             if (num) {
                 if (!this.isAccount) {
@@ -61,22 +66,24 @@
 
         setTimeout($.proxy(function () {
             this.$html.addClass('show-visible');
-            
+
             var top = this.el.offset().top;
-			var mainHeight = this.$html.height();
-			var cntHeight = this.$html.find('.ui-dialog-cnt').height();
-			
-            if (this.isNumber || this.isAccount && top >= (mainHeight - cntHeight)) {
-                $('body').addClass('numberBody').css('marginTop', -cntHeight);
+            var mainHeight = this.$html.height();
+            var cntHeight = this.$html.find('.ui-dialog-cnt').height();
+
+            if (this.isNumber || this.isAccount) {
+            		if (top >= (mainHeight - cntHeight)) {
+	                $('body').addClass('numberBody').css('marginTop', -cntHeight);
+            		}
             }
         }, this), 0);
 
         if (this.isAccount) {
             this.$html.find('[data-key="."]').addClass('bg-gray').html('&nbsp;');
         }
-        
+
         if (this.isNumber) {
-        		this.el.val(this.el.data('num') || '');
+            this.el.val(this.el.data('num') || '');
         }
 
         // 其他事件
@@ -140,7 +147,7 @@
         var $this = this;
 
         if (this.isNumber || this.isAccount) {
-            this.$html.find('[data-trigger="key"]').on('click', function () {
+            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
                 var $self = $(this);
 
                 if ($self.hasClass('bg-gray')) {
@@ -170,7 +177,7 @@
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
-            this.$html.find('[data-trigger="key"]').on('click', function () {
+            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
                 var $self = $(this);
                 var key = $self.data('key');
                 var pwd = $password.val();
@@ -201,7 +208,7 @@
         var $this = this;
 
         if (this.isNumber || this.isAccount) {
-            this.$html.find('.number-delete').on('click', function () {
+            this.$html.find('.number-delete').on(this.clickEvent, function () {
                 var num = $this.el.data('num');
                 //  数字为空的时候不在执行
                 if (num !== '') {
@@ -213,7 +220,7 @@
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
-            this.$html.find('.number-delete').on('click', function () {
+            this.$html.find('.number-delete').on(this.clickEvent, function () {
                 var pwd = $password.val();
                 // 密码为空的时候不在执行
                 if (pwd !== '') {
