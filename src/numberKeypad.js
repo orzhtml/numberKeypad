@@ -10,7 +10,11 @@
     var DEFAULTS = {
         random: false, // 是否随机摆放1-9数字
         zIndex: 1000, // 弹窗的层级，可根据不同页面配置
-        ciphertext: true, // 是否显示明文，默认密文*
+        ciphertext: true, // 是否显示明文，默认 true 密文*  | false 明文
+        dot: false, // 是否显示小数点
+        currency: false, // 是否是货币
+        max: false, // 是否有输入的最大值，false 没有，如果有，写入实际数值，例如：999999999999.99
+        digits: 2, // 默认小数点保留最多2位，需要几位就写
         type: 'password', // password | number | account
         callback: '' // 回调
     };
@@ -40,11 +44,11 @@
         $('body').append(this.$html);
 
         // 绑定默认关闭按钮
-        this.$html.find('[data-role="close"]').on(this.clickEvent, $.proxy(function () {
+        this.$html.find('[data-role="close"]').on('click', $.proxy(function () {
             this.close();
         }, this));
 
-        this.$html.find('[data-role="ok"]').on(this.clickEvent, $.proxy(function () {
+        this.$html.find('[data-role="ok"]').on('click', $.proxy(function () {
             var num = this.el.data('num');
             if (num) {
                 if (!this.isAccount) {
