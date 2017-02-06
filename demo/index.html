@@ -80,7 +80,8 @@
         $account.on('click', function () {
             $account.NumberKeypad({
                 zIndex: 1001,
-                type: 'account',
+                type: 'number',
+                dot: false,
                 callback: function (elem, number) {
                     console.log('你输入的账号为：' + number);
                 }
@@ -92,6 +93,8 @@
             $money.NumberKeypad({
                 zIndex: 1001,
                 type: 'number',
+                currency: true,
+                max: 999999999999.99,
                 callback: function (elem, number) {
                     console.log('你输入的金额为：' + number);
                 }
