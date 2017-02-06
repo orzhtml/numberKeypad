@@ -41,6 +41,7 @@
     numberKeypad.prototype.constructor = numberKeypad;
 
     numberKeypad.prototype.init = function () {
+    		var _this = this;
         $('body').append(this.$html);
 
         // 绑定默认关闭按钮
@@ -64,6 +65,19 @@
             this.options.callback && this.options.callback(this, num);
             this.close();
         }, this));
+        
+        // 点击遮罩层关闭
+		this.$html.on('click', function(event) {
+			if($(event.target).parents('.ui-dialog-cnt').first().length) {
+				return;
+			}
+			
+			if (_this.isPassword) {
+				_this.$html.find('[data-role="close"]').trigger('click');
+			} else {
+				_this.$html.find('.number-ok').trigger('click');
+			}
+		});
 
         // 显示弹窗
         this.$html.css('zIndex', this.options.zIndex).addClass('show');
@@ -71,7 +85,7 @@
         setTimeout($.proxy(function () {
             this.$html.addClass('show-visible');
 
-            var top = this.el.offset().top;
+            var top = this.el.offset().top + 50; // 避免刚好遮住部分输入框
             var mainHeight = this.$html.height();
             var cntHeight = this.$html.find('.ui-dialog-cnt').height();
 
@@ -148,7 +162,7 @@
 
     // 点击数字
     numberKeypad.prototype.add = function () {
-        var $this = this;
+        var _this = this;
 
         if (this.isNumber || this.isAccount) {
             this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
@@ -161,7 +175,7 @@
                 var key = $self.data('key');
                 var _commaNum = '';
                 // 你的回调代码
-                var num = $this.el.data('num') || '';
+                var num = _this.el.data('num') || '';
 
                 var numArr = num.split('.');
 
@@ -175,8 +189,8 @@
 
                 num += key;
 
-                $this.el.data('num', num);
-                $this.el.val(num);
+                _this.el.data('num', num);
+                _this.el.val(num);
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
@@ -190,7 +204,7 @@
                     return;
                 } else {
                     pwd += key; // 追加输入的数字
-                    if ($this.options.ciphertext) {
+                    if (_this.options.ciphertext) {
                         $pwdVal.eq(pwd.length - 1).text('*'); // 密文
                     } else {
                         $pwdVal.eq(pwd.length - 1).text(key); // 明文
@@ -201,7 +215,7 @@
                 // 输入够6位数后立即执行需要做的事情，比如ajax提交
                 if (pwd.length === 6) {
                     // 你的回调代码
-                    $this.options.callback && $this.options.callback($this, pwd);
+                    _this.options.callback && _this.options.callback(_this, pwd);
                 }
             });
         }
@@ -209,16 +223,16 @@
 
     // 从右边开始删除密码
     numberKeypad.prototype.del = function () {
-        var $this = this;
+        var _this = this;
 
         if (this.isNumber || this.isAccount) {
             this.$html.find('.number-delete').on(this.clickEvent, function () {
-                var num = $this.el.data('num');
+                var num = _this.el.data('num');
                 //  数字为空的时候不在执行
                 if (num !== '') {
                     num = num.slice(0, -1); // 从最右边开始截取 1 位字符
-                    $this.el.data('num', num); // 赋值给文本框同步
-                    $this.el.val(num);
+                    _this.el.data('num', num); // 赋值给文本框同步
+                    _this.el.val(num);
                 }
             });
         } else {
