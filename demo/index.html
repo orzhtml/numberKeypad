@@ -37,40 +37,27 @@
             color: #fff;
         }
         
-        #code {
-        		line-height: 1.5;
+        .code {
+        		height: 450px;
+        }
+        
+        .input {
+        		border: 1px solid #999;
+        		line-height: 18px;
+        		padding: 5px;
         }
     </style>
 </head>
 
 <body>
-    <div id="code" style="margin-top: 112.5px;">
-        <span class="comments"><font face="楷体" size="6" color="pink">我的爱人</font></span><br>
-        <span class="space">我会牵着你的手，走到我们满头白发的那一天</span><br>
-        <span class="space">我会守护你生命里的精彩，并陪伴你一路精彩下去。</span><br>
-        <span class="space">你的幸福快乐，是我一生的追求。</span><br>
-        <span class="space">我会每一天带着笑脸，和你说早安，</span><br>
-        <span class="space">我会每一晚与你道声晚安再入梦乡，</span><br>
-        <span class="space">我会带你去所有你想去的地方，</span><br>
-        <span class="space">陪你闹看你笑</span><br>
-        <span class="space">历经你生命中所有的点点滴滴。</span><br>
-        <span class="space">我期待这一生与你一起走过，</span><br>
-        <span class="space">走到尽头再回头看尽一生铅华满地，</span><br>
-        <span class="space">我期待与你慢慢变老，</span><br>
-        <span class="space">等我们老到哪儿也去不了，</span><br>
-        <span class="space">还能满载着一生的幸福快乐。</span><br>
-        <span class="space">我愿意爱你直到老去</span><br>
-        <span>_</span>
+    <div class="code"></div>
+    <div>
+        account：<input type="text" class="input" id="account" readonly="readonly" placeholder="请输入账号" /><br><br>
     </div>
     <div>
-        account：<input type="text" id="account" readonly="readonly" placeholder="请输入账号" />
+        money: <input type="text" class="input" id="money" readonly="readonly" placeholder="请输入转账金额" /><br><br>
     </div>
     <div>
-        <input type="text" id="money" readonly="readonly" placeholder="请输入转账金额" />
-        <a class="btn" id="btnNumber">输入金额</a>
-    </div>
-    <div>
-        <input type="hidden" id="password" />
         <a class="btn" id="btnPassword">去支付</a>
     </div>
     <script src="../src/jquery-2.1.4.min.js"></script>

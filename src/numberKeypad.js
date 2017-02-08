@@ -120,7 +120,7 @@
         var $box = this.$html.find('.number-box');
         var arr = [];
         // 随机 0-9
-        if (this.options.random && !this.isNumber) {
+        if (this.options.random && this.isPassword) {
             while (arr.length < 10) {
                 //取 1-9 之间的整数
                 var num = Math.floor(10 * Math.random());
@@ -137,11 +137,10 @@
                 }
             }
         } else {
-            // 默认 1-9-0
-            if (this.isPassword) {
-            		arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
-            } else {
+            if (this.isNumber) {
                 arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, (this.options.dot ? '.' : ''), 0];
+            } else {
+                arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
             }
         }
         // 渲染数字按钮
@@ -151,7 +150,7 @@
             if (val != '') {
                 $self.data('key', arr[i]).html(val);
             } else {
-            		$self.addClass('bg-gray').html('&nbsp;');
+                $self.addClass('bg-gray').html('&nbsp;');
             }
         });
     };
@@ -184,13 +183,13 @@
                 }
 
                 num += key;
-				// 限制不能超过 max
-				if(_this.options.max && num > _this.options.max) {
-					num = num.substring(0, num.length - 1);
-					$this.el.data('num', num);
-					$this.el.val(num);
-					return false;
-				}
+                // 限制不能超过 max
+                if (_this.options.max && num > _this.options.max) {
+                    num = num.substring(0, num.length - 1);
+                    $this.el.data('num', num);
+                    $this.el.val(num);
+                    return false;
+                }
                 _this.el.data('num', num);
                 _this.el.val(num);
             });
