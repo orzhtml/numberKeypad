@@ -23,26 +23,22 @@
 
     function numberKeypad(elem, args) {
         this.options = $.extend({}, DEFAULTS, args);
-
         this.isPassword = this.options.type === 'password';
         this.isNumber = this.options.type === 'number';
         this.isCurrency = this.options.currency;
-        this.clickEvent = 'click';
-        if (isIos) {
-            this.clickEvent = 'touchstart';
-        }
+        this.clickEvent = isIos ? 'touchstart' : 'click';
         // 选择模板
         this.$html = this.isNumber ? $(templateNumber()) : $(templatePwd());
-
         this.el = elem;
+        this.$body = $('body');
         this.init();
-    };
+    }
 
     numberKeypad.prototype.constructor = numberKeypad;
 
     numberKeypad.prototype.init = function () {
         var _this = this;
-        $('body').append(this.$html);
+        this.$body.append(this.$html);
 
         // 绑定默认关闭按钮
         this.$html.find('[data-role="close"]').on('click', $.proxy(function () {
@@ -61,7 +57,7 @@
                 this.el.val('');
                 num = '';
             }
-            $('body').css('marginTop', '');
+            this.$body.css('marginTop', '');
             this.options.callback && this.options.callback(this, num);
             this.close();
         }, this));
@@ -89,10 +85,8 @@
             var mainHeight = this.$html.height();
             var cntHeight = this.$html.find('.ui-dialog-cnt').height();
 
-            if (this.isNumber) {
-                if (top >= (mainHeight - cntHeight)) {
-                    $('body').addClass('numberBody').css('marginTop', -cntHeight);
-                }
+            if (top >= (mainHeight - cntHeight) && this.isNumber) {
+                this.$body.addClass('numberBody').css('marginTop', -cntHeight);
             }
         }, this), 100);
 
@@ -111,7 +105,7 @@
         this.$html.removeClass("show-visible");
         setTimeout($.proxy(function () {
             this.$html.remove();
-            $('body').removeClass('numberBody');
+            this.$body.removeClass('numberBody');
         }, this), 300);
     };
 
@@ -159,9 +153,13 @@
     numberKeypad.prototype.add = function () {
         var _this = this;
 
+        this.$html.find('[data-trigger="key"]').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
         if (this.isNumber) {
-            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function (e) {
-            		e.preventDefault();
+            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
                 var $self = $(this);
 
                 if ($self.hasClass('bg-gray')) {
@@ -170,7 +168,7 @@
 
                 var key = $self.data('key');
                 var _commaNum = '';
-              
+
                 var num = _this.el.data('num') || '';
 
                 var numArr = num.split('.');
@@ -193,13 +191,11 @@
                 }
                 _this.el.data('num', num);
                 _this.el.val(num);
-                return;
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
-            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function (e) {
-            		e.preventDefault();
+            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
                 var $self = $(this);
                 var key = $self.data('key');
                 var pwd = $password.val();
@@ -221,7 +217,6 @@
                     // 你的回调代码
                     _this.options.callback && _this.options.callback(_this, pwd);
                 }
-                return;
             });
         }
     };
@@ -229,10 +224,14 @@
     // 从右边开始删除密码
     numberKeypad.prototype.del = function () {
         var _this = this;
-
+        
+        this.$html.find('.number-delete').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        
         if (this.isNumber) {
-            this.$html.find('.number-delete').on(this.clickEvent, function (e) {
-            		e.preventDefault();
+            this.$html.find('.number-delete').on(this.clickEvent, function () {
                 var num = _this.el.data('num');
                 //  数字为空的时候不在执行
                 if (num !== '') {
@@ -240,13 +239,11 @@
                     _this.el.data('num', num); // 赋值给文本框同步
                     _this.el.val(num);
                 }
-                return;
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
-            this.$html.find('.number-delete').on(this.clickEvent, function (e) {
-            		e.preventDefault();
+            this.$html.find('.number-delete').on(this.clickEvent, function () {
                 var pwd = $password.val();
                 // 密码为空的时候不在执行
                 if (pwd !== '') {
@@ -254,7 +251,6 @@
                     $password.val(pwd); // 赋值给密码框同步密码
                     $pwdVal.eq(pwd.length).text(''); // 密码明文显示从右开始清空文本
                 }
-                return;
             });
         }
     };

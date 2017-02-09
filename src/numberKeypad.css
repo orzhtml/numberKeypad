@@ -195,7 +195,8 @@ body.numberBody {
     width: 33.3333%;
 }
 
-.number-keypad .ui-flex-item:not(.bg-gray):active {
+.number-keypad .ui-flex-item:not(.bg-gray):active,
+.number-keypad .ui-flex-item:not(.bg-gray).active {
     background-color: rgba(238, 238, 238, 0.2);
 }
 
