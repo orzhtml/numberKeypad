@@ -120,6 +120,9 @@ body.numberBody {
     -webkit-transition: all 300ms;
     transition: all 300ms;
 }
+.number-keypad, .number-keypad * {
+	box-sizing: border-box;
+}
 
 .number-keypad .ui-dialog-hd {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -136,9 +139,6 @@ body.numberBody {
 }
 
 .number-keypad .pwd-box {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
     font-size: 0;
     padding: 35px 22px;
     text-align: center;
@@ -149,14 +149,13 @@ body.numberBody {
     background-color: #f2f2f2;
     border: 1px solid #ddd;
     font-size: 24px;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
+    display: inline-block;
     height: 45px;
     line-height: 35px;
     padding: 10px 0;
     text-align: center;
-    width: 100%;
+    width: 16.6666%;
+    vertical-align: middle;
 }
 
 .number-keypad .pwd-val:first-child {
@@ -181,9 +180,7 @@ body.numberBody {
 
 .number-keypad .ui-flex {
     border-bottom: 1px solid #eee;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
+    font-size: 0;
     text-align: center;
     width: 100%;
 }
@@ -191,11 +188,11 @@ body.numberBody {
 .number-keypad .ui-flex-item {
     background-color: #fff;
     border-right: 1px solid #eee;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
+    display: inline-block;
     font-size: 24px;
+    height: 52px;
     line-height: 52px;
+    width: 33.3333%;
 }
 
 .number-keypad .ui-flex-item:not(.bg-gray):active {
@@ -230,31 +227,26 @@ body.numberBody {
     vertical-align: middle;
 }
 
-.number-keypad .number-bar {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-}
-
 .number-keypad .number-bar .number-box {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    width: auto;
+    padding-right: 80px;
+    width: 100%;
 }
 
 .number-keypad .number-bar .fun-box {
+	position: absolute;
+	right: 0;
+	top: 0;
     width: 80px;
 }
 
 .number-keypad .number-bar .fun-box .ui-border-b {
-    height: 100%;
+	height: 212px;
 }
 
 .number-keypad .number-bar .fun-box a {
     border-left: 1px solid #eee;
     display: block;
-    height: 50%;
+	height: 106px;
 }
 
 .number-keypad .number-bar .fun-box a:active {

@@ -94,7 +94,7 @@
                     $('body').addClass('numberBody').css('marginTop', -cntHeight);
                 }
             }
-        }, this), 0);
+        }, this), 100);
 
         if (this.isNumber) {
             this.el.val(this.el.data('num') || '');
@@ -160,7 +160,8 @@
         var _this = this;
 
         if (this.isNumber) {
-            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
+            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function (e) {
+            		e.preventDefault();
                 var $self = $(this);
 
                 if ($self.hasClass('bg-gray')) {
@@ -169,7 +170,7 @@
 
                 var key = $self.data('key');
                 var _commaNum = '';
-                // 你的回调代码
+              
                 var num = _this.el.data('num') || '';
 
                 var numArr = num.split('.');
@@ -188,15 +189,17 @@
                     num = num.substring(0, num.length - 1);
                     $this.el.data('num', num);
                     $this.el.val(num);
-                    return false;
+                    return;
                 }
                 _this.el.data('num', num);
                 _this.el.val(num);
+                return;
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
-            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function () {
+            this.$html.find('[data-trigger="key"]').on(this.clickEvent, function (e) {
+            		e.preventDefault();
                 var $self = $(this);
                 var key = $self.data('key');
                 var pwd = $password.val();
@@ -218,6 +221,7 @@
                     // 你的回调代码
                     _this.options.callback && _this.options.callback(_this, pwd);
                 }
+                return;
             });
         }
     };
@@ -227,7 +231,8 @@
         var _this = this;
 
         if (this.isNumber) {
-            this.$html.find('.number-delete').on(this.clickEvent, function () {
+            this.$html.find('.number-delete').on(this.clickEvent, function (e) {
+            		e.preventDefault();
                 var num = _this.el.data('num');
                 //  数字为空的时候不在执行
                 if (num !== '') {
@@ -235,11 +240,13 @@
                     _this.el.data('num', num); // 赋值给文本框同步
                     _this.el.val(num);
                 }
+                return;
             });
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
-            this.$html.find('.number-delete').on(this.clickEvent, function () {
+            this.$html.find('.number-delete').on(this.clickEvent, function (e) {
+            		e.preventDefault();
                 var pwd = $password.val();
                 // 密码为空的时候不在执行
                 if (pwd !== '') {
@@ -247,6 +254,7 @@
                     $password.val(pwd); // 赋值给密码框同步密码
                     $pwdVal.eq(pwd.length).text(''); // 密码明文显示从右开始清空文本
                 }
+                return;
             });
         }
     };
