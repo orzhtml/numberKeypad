@@ -116,7 +116,7 @@
  * 支付密码弹窗样式
  * */
 
-body.numberBody {
+body.number-body {
     -webkit-transition: all 300ms;
     transition: all 300ms;
 }
@@ -175,14 +175,14 @@ body.numberBody {
     width: 100%;
 }
 
-.number-keypad .ui-flex {
+.number-keypad .number-flex {
     border-bottom: 1px solid #eee;
     font-size: 0;
     text-align: center;
     width: 100%;
 }
 
-.number-keypad .ui-flex-item {
+.number-keypad .number-flex-item {
     background-color: #fff;
     border-right: 1px solid #eee;
     display: inline-block;
@@ -192,12 +192,12 @@ body.numberBody {
     width: 33.3333%;
 }
 
-.number-keypad .ui-flex-item:not(.bg-gray):active,
-.number-keypad .ui-flex-item:not(.bg-gray).active {
+.number-keypad .number-flex-item:not(.bg-gray):active,
+.number-keypad .number-flex-item:not(.bg-gray).active {
     background-color: rgba(238, 238, 238, 0.2);
 }
 
-.number-keypad .ui-flex-item:last-child {
+.number-keypad .number-flex-item:last-child {
     border-right: 0;
 }
 

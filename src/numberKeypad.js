@@ -86,7 +86,7 @@
             var cntHeight = this.$html.find('.ui-dialog-cnt').height();
 
             if (top >= (mainHeight - cntHeight) && this.isNumber) {
-                this.$body.addClass('numberBody').css('marginTop', -cntHeight);
+                this.$body.addClass('number-body').css('marginTop', -cntHeight);
             }
         }, this), 100);
 
@@ -105,7 +105,8 @@
         this.$html.removeClass("show-visible");
         setTimeout($.proxy(function () {
             this.$html.remove();
-            this.$body.removeClass('numberBody');
+            this.$body.removeClass('number-body');
+            $(window).off('keyup.keyboardDel').off('keyup.keyboard');
         }, this), 300);
     };
 
@@ -142,7 +143,7 @@
             var $self = $(this);
             var val = arr[i] + '';
             if (val != '') {
-                $self.data('key', arr[i]).html(val);
+                $self.data('key', val).html(val);
             } else {
                 $self.addClass('bg-gray').html('&nbsp;');
             }
@@ -192,6 +193,32 @@
                 _this.el.data('num', num);
                 _this.el.val(num);
             });
+
+            $(window).off('keyup.keyboard').on('keyup.keyboard', function (e) {
+                var keycode = e.keyCode;
+                var key = e.key;
+                if (keycode >= 48 && keycode <= 57 || keycode == 190) {
+                    var _commaNum = '';
+                    var num = _this.el.data('num') || '';
+                    var numArr = num.split('.');
+                    if (num.indexOf('.') >= 0 && key == '.') {
+                        return;
+                    }
+                    if (num.indexOf('.') >= 0 && numArr[1].length >= 2) {
+                        return;
+                    }
+                    num += key;
+                    // 限制不能超过 max
+                    if (_this.options.max && num > _this.options.max) {
+                        num = num.substring(0, num.length - 1);
+                        $this.el.data('num', num);
+                        $this.el.val(num);
+                        return;
+                    }
+                    _this.el.data('num', num);
+                    _this.el.val(num);
+                }
+            });
         } else {
             var $password = this.$html.find('.password'); // 密码
             var $pwdVal = this.$html.find('.pwd-val'); // 密码显示文
@@ -218,18 +245,44 @@
                     _this.options.callback && _this.options.callback(_this, pwd);
                 }
             });
+
+            $(window).off('keyup.keyboard').on('keyup.keyboard', function (e) {
+                var keycode = e.keyCode;
+                var key = e.key;
+                var pwd = $password.val();
+                if (keycode >= 48 && keycode <= 57) {
+                    // 超过 6 位不允许再录入
+                    if (pwd.length >= 6) {
+                        return;
+                    } else {
+                        pwd += key; // 追加输入的数字
+                        if (_this.options.ciphertext) {
+                            $pwdVal.eq(pwd.length - 1).text('*'); // 密文
+                        } else {
+                            $pwdVal.eq(pwd.length - 1).text(key); // 明文
+                        }
+                        $password.val(pwd); // 填入隐藏域
+                    }
+
+                    // 输入够6位数后立即执行需要做的事情，比如ajax提交
+                    if (pwd.length === 6) {
+                        // 你的回调代码
+                        _this.options.callback && _this.options.callback(_this, pwd);
+                    }
+                }
+            });
         }
     };
 
     // 从右边开始删除密码
     numberKeypad.prototype.del = function () {
         var _this = this;
-        
+
         this.$html.find('.number-delete').on('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
         });
-        
+
         if (this.isNumber) {
             this.$html.find('.number-delete').on(this.clickEvent, function () {
                 var num = _this.el.data('num');
@@ -238,6 +291,19 @@
                     num = num.slice(0, -1); // 从最右边开始截取 1 位字符
                     _this.el.data('num', num); // 赋值给文本框同步
                     _this.el.val(num);
+                }
+            });
+
+            $(window).off('keyup.keyboardDel').on('keyup.keyboardDel', function (e) {
+                var keycode = e.keyCode;
+                if (keycode == 8) {
+                		var num = _this.el.data('num');
+	                //  数字为空的时候不在执行
+	                if (num !== '') {
+	                    num = num.slice(0, -1); // 从最右边开始截取 1 位字符
+	                    _this.el.data('num', num); // 赋值给文本框同步
+	                    _this.el.val(num);
+	                }
                 }
             });
         } else {
@@ -250,6 +316,19 @@
                     pwd = pwd.slice(0, -1); // 从最右边开始截取 1 位字符
                     $password.val(pwd); // 赋值给密码框同步密码
                     $pwdVal.eq(pwd.length).text(''); // 密码明文显示从右开始清空文本
+                }
+            });
+
+            $(window).off('keyup.keyboardDel').on('keyup.keyboardDel', function (e) {
+                var keycode = e.keyCode;
+                if (keycode == 8) {
+                		var pwd = $password.val();
+	                // 密码为空的时候不在执行
+	                if (pwd !== '') {
+	                    pwd = pwd.slice(0, -1); // 从最右边开始截取 1 位字符
+	                    $password.val(pwd); // 赋值给密码框同步密码
+	                    $pwdVal.eq(pwd.length).text(''); // 密码明文显示从右开始清空文本
+	                }
                 }
             });
         }
@@ -320,25 +399,25 @@
 	            				<div class="pwd-val"></div>
 	            			</div>
 	            			<div class="number-box ui-border-t">
-		            			<div class="ui-flex ui-border-b">
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
+		            			<div class="number-flex ui-border-b">
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
 		            			</div>
-		            			<div class="ui-flex ui-border-b">
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
+		            			<div class="number-flex ui-border-b">
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
 		            			</div>
-		            			<div class="ui-flex ui-border-b">
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
+		            			<div class="number-flex ui-border-b">
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
 		            			</div>
-	            				<div class="ui-flex ui-border-b">
-	            					<a class="ui-flex-item ui-border-r bg-gray">&nbsp;</a>
-	            					<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-	            					<a class="ui-flex-item ui-border-r number-delete"><i class="icon icon-delete"></i></a>
+	            				<div class="number-flex ui-border-b">
+	            					<a class="number-flex-item ui-border-r bg-gray">&nbsp;</a>
+	            					<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+	            					<a class="number-flex-item ui-border-r number-delete"><i class="icon icon-delete"></i></a>
 	            				</div>
 	            			</div>
 	            		</div>
@@ -356,25 +435,25 @@
 	            	<div class="ui-dialog-cnt">
 	            		<div class="ui-dialog-bd number-bar">
 	            			<div class="number-box ui-border-t">
-	            				<div class="ui-flex ui-border-b">
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
+	            				<div class="number-flex ui-border-b">
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
 		            			</div>
-		            			<div class="ui-flex ui-border-b">
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
+		            			<div class="number-flex ui-border-b">
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
 		            			</div>
-		            			<div class="ui-flex ui-border-b">
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-			            			<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
+		            			<div class="number-flex ui-border-b">
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+			            			<a class="number-flex-item ui-border-r" data-trigger="key"></a>
 		            			</div>
-	            				<div class="ui-flex ui-border-b">
-	            					<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-	            					<a class="ui-flex-item ui-border-r" data-trigger="key"></a>
-	            					<a class="ui-flex-item ui-border-r number-hide" data-role="ok"><i class="icon icon-hide"></i></a>
+	            				<div class="number-flex ui-border-b">
+	            					<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+	            					<a class="number-flex-item ui-border-r" data-trigger="key"></a>
+	            					<a class="number-flex-item ui-border-r number-hide" data-role="ok"><i class="icon icon-hide"></i></a>
 	            				</div>
 	            			</div>
 	            			<div class="fun-box ui-border-t">
