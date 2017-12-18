@@ -480,4 +480,6 @@
             $(el).data("NumberKeypad", plugins);
         });
     };
+    
+    window.numberKeypad = numberKeypad;
 })(jQuery, window);
